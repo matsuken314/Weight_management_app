@@ -7,7 +7,18 @@ import Rails from "@rails/ujs"
 import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
+import 'chart.js/dist/chart';
 
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
+
+require("bootstrap/dist/js/bootstrap")
+
+// Chart.js
+require('chart.js')
+// カレンダー
+require('flatpickr')
+require('flatpickr/dist/l10n/ja')
+// カレンダーの色を変更
+require("flatpickr/dist/themes/material_blue.css")
