@@ -15,6 +15,8 @@ ActiveStorage.start()
 
 require("bootstrap/dist/js/bootstrap")
 
+require('./graphs.js')
+
 // Chart.js
 require('chart.js')
 // カレンダー
