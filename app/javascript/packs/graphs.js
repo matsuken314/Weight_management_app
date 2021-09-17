@@ -1,4 +1,7 @@
 document.addEventListener('turbolinks:load', () => {
+
+    if (document.getElementById('start-calendar')) {
+        
     // '2020-01-12'のような文字列から，Javascriptの日付オブジェクトを取得する関数
     // setHoursを使用しないと，時差の影響で0時にならないため注意！
     const convertDate = (date) => new Date(new Date(date).setHours(0, 0, 0, 0))
@@ -71,11 +74,15 @@ document.addEventListener('turbolinks:load', () => {
             chartWeight.update()
         }
     }
-
+const minDate = (date1, date2) => (date1 < date2) ? date1 : date2
+    const maxDate = (date1, date2) => (date1 > date2) ? date1 : date2
+// データの初日・最終日
+    const START_DATE = convertDate(gon.weight_records[0].date)
+        const END_DATE = convertDate(gon.weight_records[gon.weight_records.length - 1].date)
     // グラフの初期表示
     drawGraph(A_WEEK_AGO, TODAY)
-
-        const END_DATE = convertDate(gon.weight_records[gon.weight_records.length - 1].date)
+    // 日付の古い方・新しい方を取得する関数
+    
     // ********** 以下を追加 **********
     // カレンダーの日本語化
     flatpickr.localize(flatpickr.l10ns.ja)
@@ -106,13 +113,45 @@ document.addEventListener('turbolinks:load', () => {
         from = maxDate(from, START_DATE)
         let to = minDate(TODAY, END_DATE)
         drawGraph(from, to)
-            // フォームの開始日・終了日を変更する
-            startCalendarFlatpickr.setDate(from)
-            endCalendarFlatpickr.setDate(to)
     }
+    // 過去◯週間のグラフを描くボタン
+    document.getElementById('a-week-button').addEventListener('click', () => {
+        drawGraphToToday(A_WEEK_AGO)
+    })
 
-    // カレンダー
+    document.getElementById('two-weeks-button').addEventListener('click', () => {
+        drawGraphToToday(TWO_WEEKS_AGO)
+    })
+
+    document.getElementById('a-month-button').addEventListener('click', () => {
+        drawGraphToToday(A_MONTH_AGO)
+    })
+
+    document.getElementById('three-months-button').addEventListener('click', () => {
+        drawGraphToToday(THREE_MONTHS_AGO)
+    })
+    drawGraphToToday(A_WEEK_AGO)
+  // カレンダー
     const startCalendarFlatpickr = flatpickr('#start-calendar', periodCalendarOption)
     const endCalendarFlatpickr = flatpickr('#end-calendar', periodCalendarOption)
+    
+// 編集モーダルで日付を選択したときに，記録された体重を表示する関数
+    const editCalendar = document.getElementById('edit-calendar')
+    const editWeight = document.getElementById('edit-weight')
+    const inputWeight = () => {
+        let record = gon.weight_records.find((record) => record.date === editCalendar.value)
+        editWeight.value = record.weight
+    }
+
+    // 記録編集用のカレンダー
+    flatpickr('#edit-calendar', {
+        disableMobile: true,
+        // 記録のある日付のみ選択できるようにする
+        enable: gon.recorded_dates,
+        // 記録が無い場合は日付を選択できないようにする
+        noCalendar: gon.recorded_dates.length === 0,
+        onChange: inputWeight
+    })
+}
 })  
 

@@ -3,7 +3,7 @@ class Graph < ApplicationRecord
   # 一人のユーザーが同じ日付のデータを複数記録できないようにする
   validates :date, presence: true, uniqueness: { scope: :user_id }
   validates :weight, presence: true
-# そのままデータを取り出すと，日付が不連続なデータになるため，日付の連続したデータを作成する。
+  # そのままデータを取り出すと，日付が不連続なデータになるため，日付の連続したデータを作成する。
   def self.chart_data(user)
     graphs = user.graphs.order(date: :asc)
     # 記録が無い場合にエラーが出るのを防止
@@ -21,5 +21,4 @@ class Graph < ApplicationRecord
       { date: date, weight: weight }
     end
   end
-
 end

@@ -7,6 +7,6 @@ class CreateGraphs < ActiveRecord::Migration[6.1]
 
       t.timestamps
     end
-     add_index :graphs, [:user_id, :date], unique: true
+    add_index :graphs, [:user_id, :date], unique: true
   end
 end
